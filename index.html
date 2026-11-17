@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Opening in Word...</title>
+  <style>
+    body { font-family: Segoe UI, sans-serif; text-align: center; padding-top: 80px; color: #333; }
+  </style>
+</head>
+<body>
+  <h2>Opening your document in Microsoft Word...</h2>
+  <p>You can close this browser tab once Word launches.</p>
+
+  <script>
+    // 1. Grab the 'file' parameter from the URL
+    const params = new URLSearchParams(window.location.search);
+    const fileUrl = params.get('file');
+
+    const allowedDomain = "https://prefchem365.sharepoint.com.mcas.ms/";
+
+    if (fileUrl && fileUrl.startsWith(allowedDomain)) {
+      // 3. Trigger the Word desktop protocol
+      window.location.href = "ms-word:ofe|u|" + fileUrl;
+    } else {
+      document.body.innerHTML = "<h2>Invalid or unauthorized document link.</h2>";
+    }
+  </script>
+</body>
+</html>
