@@ -12,15 +12,23 @@
   <p>You can close this browser tab once Word launches.</p>
 
   <script>
-    // 1. Grab the 'file' parameter from the URL
     const params = new URLSearchParams(window.location.search);
     const fileUrl = params.get('file');
-
     const allowedDomain = "https://srkk.sharepoint.com/";
 
     if (fileUrl && fileUrl.startsWith(allowedDomain)) {
-      // 3. Trigger the Word desktop protocol
+      // 1. Trigger the Word desktop protocol
       window.location.href = "ms-word:ofe|u|" + fileUrl;
+
+      // 2. Wait 2.5 seconds for the protocol prompt to fire, then try closing
+      setTimeout(() => {
+        window.open('', '_self', ''); // Workaround for certain Chromium versions
+        window.close();
+
+        // 3. Fallback message if the browser blocks auto-closing
+        document.querySelector('h2').textContent = "Microsoft Word launched!";
+        document.querySelector('p').textContent = "Your browser prevented auto-closing. You may safely close this tab.";
+      }, 2500);
     } else {
       document.body.innerHTML = "<h2>Invalid or unauthorized document link.</h2>";
     }
